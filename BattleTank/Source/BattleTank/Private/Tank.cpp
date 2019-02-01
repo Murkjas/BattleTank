@@ -2,6 +2,11 @@
 
 #include "Tank.h"
 
+float ATank::GetHealthPercent() const
+{
+	return (float)CurrentHealth / (float)StartingHealth;
+}
+
 // Sets default values
 ATank::ATank()
 {
@@ -13,5 +18,19 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentHealth = StartingHealth;
 		
+}
+
+float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const &DamageEvent, class AController* EventInstigator, AActor* DamageCauser) {
+
+	int32 DamagePoints = FPlatformMath::RoundToInt(DamageAmount); // Convert floating point damage to integer damage by rounding to nearest integer
+	int32 DamageToApply = FMath::Clamp(DamagePoints, 0, CurrentHealth); // Compare damage as an integer
+
+	CurrentHealth -= DamageToApply;
+	if (CurrentHealth <= 0) {
+		OnDeath.Broadcast();
+	}
+
+	return DamageToApply;
 }

@@ -23,4 +23,14 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 40000000;
 	
+private:
+
+	UTankTrack();
+
+	virtual void BeginPlay() override;
+
+	TArray<class ASprungWheel*> GetWheels() const;
+
+	void DriveTrack(float CurrentThrottle);
+
 };
